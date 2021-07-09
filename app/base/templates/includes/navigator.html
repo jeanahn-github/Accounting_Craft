@@ -1,0 +1,141 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <i class="fas fa-drafting-compass"></i> Accounting Craft |
+        </div>
+        <button aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarScroll" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 300px;">
+
+                <li class="nav-item">
+                    <a aria-current="page"
+                       class="nav-link {% if 'index' in segment %} active {% endif %}" href="{{ url_for('home_blueprint.index') }}">
+                        <i class="bi bi-graph-up _nav-icon"></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a aria-current="page"
+                       class="nav-link {% if 'transactions' in segment %} active {% endif %}"
+                       href="{{url_for('home_blueprint.transactions')}}">
+                        <i class="bi-pencil-square _nav-icon"></i>
+                        Transactions
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a aria-current="page"
+                       class="nav-link {% if 'closing' in segment %} active {% endif %}"
+                       href="{{url_for('home_blueprint.closing')}}">
+                        <i class="bi bi-door-closed-fill _nav-icon"></i>
+                        Closing
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false"
+                       class="nav-link dropdown-toggle {% if 'reports' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-reports"
+                       id="navbarScrollingDropdown1" role="button">
+                        <i class='bi bi-table nav_icon'></i>
+                        Reports
+                    </a>
+                    <ul aria-labelledby="navbarScrollingDropdown1" class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item {% if 'reports_account' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_account')}}">
+                                계정원장
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'reports_partner' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_partner')}}">
+                                거래처원장
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'reports_trial' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_trial')}}">
+                                시산표
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'reports_bs' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_bs')}}">
+                                재무상태표
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'reports_pl' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_pl')}}">
+                                손익계산서
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false"
+                       class="nav-link dropdown-toggle {% if 'settings' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-settings"
+                       id="navbarScrollingDropdown2" role="button">
+                        <i class='bi bi-gear-fill nav_icon'></i>
+                        Settings
+                    </a>
+                    <ul aria-labelledby="navbarScrollingDropdown2" class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item {% if 'settings_company' in segment %} active {% endif %}" href="#">
+                                회사
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_coa' in segment %} active {% endif %}" href="#">
+                                계정과목
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_product' in segment %} active {% endif %}" href="#">
+                                품목
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_partner' in segment %} active {% endif %}" href="#">
+                                거래처
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_project' in segment %} active {% endif %}" href="#">
+                                프로젝트
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_bank_account' in segment %} active {% endif %}" href="#">
+                                은행계좌
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'settings_init_balance' in segment %} active {% endif %}" href="#">
+                                기초잔액
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="_navbar-welcome">
+            <span>{{ current_user.username }}님 환영합니다.</span>
+        </div>
+        <div class="btn btn-outline-secondary">
+            <span>로그아웃</span>
+        </div>
+
+    </div>
+</nav>
