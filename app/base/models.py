@@ -138,12 +138,12 @@ class JournalEntry(db.Model):
     project_code = db.Column(db.String(10), db.ForeignKey('project.project_code'), nullable = True)
     project = db.relationship('Project', backref = db.backref('document_set'))
 
-    payment_type = db.Column(db.String(10), nullable=True)
+    payment_type = db.Column(db.String(2), nullable=True)
 
-    bank_account_number = db.Column(db.Integer, db.ForeignKey('bank_account.bank_account_number'), nullable = False)
+    bank_account_number = db.Column(db.Integer, db.ForeignKey('bank_account.bank_account_number'), nullable = True)
     bank_account = db.relationship('BankAccount', backref = db.backref('document_set'))
 
     document_description = db.Column(db.Text, nullable = True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    user_name = db.Column(db.String, db.ForeignKey('user.username'), nullable = False)
     user = db.relationship('User', backref = db.backref('document_set'))

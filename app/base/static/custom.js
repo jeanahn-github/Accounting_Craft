@@ -1,24 +1,26 @@
+///* Transaction 초기화면에서 전표유형 선택시 전표양식 modal 폼 Trigger */
+//function triggerModalForm() {
+//
+//    var radios = document.getElementsByName('transaction-inlineRadioOptions');
+//    var radio_value;
+//    for(var i = 0; i < radios.length; i++) {
+//        if(radios[i].checked){
+//            radio_value = radios[i].value;
+//        }
+//    }
+//    console.log(radio_value);
+//    document.getElementById("transactionCreateModalLabel").innerHTML = radio_value
+//}
 
-/* Transaction 초기화면에서 전표유형 선택시 전표양식 modal 폼 Trigger */
-function triggerModalForm() {
-
-    var radios = document.getElementsByName('transaction-inlineRadioOptions');
-    var radio_value;
-    for(var i = 0; i < radios.length; i++) {
-        if(radios[i].checked){
-            radio_value = radios[i].value;
-        }
-    }
-    document.getElementById("transactionCreateModalLabel").innerHTML = radio_value
-}
-
-/* 전표양식 modal 폼에서 품목 선택시 과세여부, 단가 정보 전달 */
+/* 전표입력 양식에서 품목 선택시 과세여부, 단가 정보 전달 */
 function selectedProductDetail(selectedObject) {
 
     // 새로운 행 요소의 id 추적
     //TODO: HTML element Node 탐색 단순화 필요
     var salesTaxId = selectedObject.parentElement.nextElementSibling.id;
     var salesCostId = selectedObject.parentElement.nextElementSibling.nextElementSibling.id;
+
+    console.log(salesTaxId, salesCostId);
 
     var selectedProduct = product_data.filter(product => product[0] === selectedObject.value);
 
@@ -32,7 +34,7 @@ function selectedProductDetail(selectedObject) {
 }
 
 
-/* 전표양식 modal 펌에서 수량 입력시 공급가, 부가세, 결재금액 자동계산 */
+/* 전표입력 양식에서 수량 입력시 공급가, 부가세, 결재금액 자동계산 */
 function salesAmountCalculation(selectedObject) {
 
     // 수량 필드를 기준으로 상대적 노드를 통해 새로운 행 요소의 id 추적
@@ -73,7 +75,7 @@ function salesAmountCalculation(selectedObject) {
 }
 
 
-/* [JQuery] 전표양식 modal 폼에서 테이블의 새로운 품목 입력행 추가 */
+/* [JQuery] 전표입력 양식에서 테이블의 새로운 품목 입력행 추가 */
 //TODO - 모든 행 삭제 후 추가버튼 실행시 작동 안하는 문제 해결 필요
 $(document).ready(function() {
 
@@ -112,7 +114,7 @@ $(document).ready(function() {
 });
 
 
-/* [JQuery] 전표양식 modal 폼에서 테이블의 품목 입력행 삭제 */
+/* [JQuery] 전표입력 양식에서 테이블의 품목 입력행 삭제 */
 $(document).ready(function() {
 
   $("#button-delete-row").click(function(e) {
@@ -133,7 +135,7 @@ $(document).ready(function() {
 });
 
 
-/* [JQuery] 전표양식 modal 폼에서 테이블의 품목들의 합계금액 표시*/
+/* [JQuery] 전표입력 양식에서 테이블의 품목들의 합계금액 표시*/
 $(document).ready(function() {
 
     var sumDataArray = {};
@@ -160,7 +162,7 @@ $(document).ready(function() {
 });
 
 
-/* 전표양식 modal 폼에서 취소 버튼 클릭시 input 데이터 삭제 */
+/* 전표입력 양식에서 취소 버튼 클릭시 input 데이터 삭제 */
 function salesFormReset() {
     document.getElementById("sales-form").reset();
     document.getElementById("sales-tax").innerHTML = "";

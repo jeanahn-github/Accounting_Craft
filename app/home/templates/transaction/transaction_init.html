@@ -1,0 +1,88 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %} Transactions {% endblock %}
+
+
+{% block content %}
+
+<!-- 전표생성 선택 Section -->
+<section>
+    <form method="post">
+        <div class="form-check form-check-inline">
+            <div class="input-group-text" id="transaction-radio">전표유형</div>
+        </div>
+        <div class="form-check form-check-inline">
+            <input checked class="form-check-input"
+                   id="transaction-inlineRadio1" name="document-type" type="radio" value="S">
+            <label class="form-check-label" for="transaction-inlineRadio1">매출전표</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="transaction-inlineRadio2" name="document-type"
+                   type="radio" value="P">
+            <label class="form-check-label" for="transaction-inlineRadio2">매입전표</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="transaction-inlineRadio3" name="document-type"
+                   type="radio" value="D">
+            <label class="form-check-label" for="transaction-inlineRadio3">입금전표</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="transaction-inlineRadio4" name="document-type"
+                   type="radio" value="W">
+            <label class="form-check-label" for="transaction-inlineRadio4">출금전표</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="transaction-inlineRadio5" name="document-type"
+                   type="radio" value="A">
+            <label class="form-check-label" for="transaction-inlineRadio5">대체전표</label>
+        </div>
+
+        <input class="btn btn-outline-primary" id="document-type-submit" type="submit" value="생성">
+
+    </form>
+</section>
+
+<hr>
+
+<!-- 전표 List Section -->
+<section>
+    <div class="container-fluid">
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">전표번호</th>
+                <th scope="col">전표일자</th>
+                <th scope="col">계정과목</th>
+                <th scope="col">차변금액</th>
+                <th scope="col">대변금액</th>
+                <th scope="col">적요</th>
+                <th scope="col">작성자</th>
+                <th scope="col">전표관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for document in documents %}
+            <tr>
+                <th scope="row">{{ document[0] }}</th>
+                <td>{{ document[1] }}</td>
+                <td>{{ document[2] }}</td>
+                {% if document[3] >= 0 %}
+                <td>{{ document[3] }}</td>
+                <td>0</td>
+                {% else %}
+                <td>0</td>
+                <td>{{ -document[3] }}</td>
+                {% endif %}
+                <td>{{ document[4] }}</td>
+                <td>{{ document[5] }}</td>
+                <td>조회/수정/삭제</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+{% endblock content %}
+

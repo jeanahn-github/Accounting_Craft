@@ -48,7 +48,7 @@ Main 화면의 Base
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 <!--Custom JS-->
-<script src="static/custom.js"></script>
+<script src="{{ url_for('base_blueprint.static', filename='custom.js') }}"></script>
 
     {% include 'includes/footer.html' %}
 </body>

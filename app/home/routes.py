@@ -1,8 +1,12 @@
 from app.home import blueprint
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import login_required, current_user
+from functools import reduce
+from sqlalchemy import func
 
-from app.base.models import Partner, Project, Product, Transaction, JournalEntry
+from app.base.models import ChartOfAccount, Partner, Project, Product, Transaction, JournalEntry
+from app import db
+from app.home.constant import SALES_ACCOUNT, ACCOUNT_RECEIVABLE, DEPOSITS_ON_DEMAND, NOTES_RECEIVABLE, CASH, PREPAID_EXPENSE, VAT_WITHHELD
 
 @blueprint.route('/index')
 @login_required
@@ -13,10 +17,40 @@ def index():
 
 @blueprint.route('/transactions', methods=["GET", "POST"])
 @login_required
-def transactions():
-    partner_items = Partner.query.all()
+def transaction_init():
+
+    """ 전표 리스트 데이터 Display """
+
+    # 1. JournalEntry, Transaction, ChartOfAccount 테이블을 join하여 계정과목별로 합산된 데이터 읽어오기
+    results = db.session.query(JournalEntry, Transaction, ChartOfAccount, func.sum(Transaction.transaction_amount)).select_from(JournalEntry).join(Transaction).join(ChartOfAccount).group_by(JournalEntry.document_number, Transaction.account_code).all()
+
+    # 2. List Comprehension 이용해 display 항목을 구성
+    documents_data = [(journal_entry.document_number, journal_entry.document_date, chart_of_account.account_name, sum_amount, journal_entry.document_description, journal_entry.user_name) for journal_entry, transaction, chart_of_account, sum_amount in results]
+
+    """ 전표유형 선택시 해당전표 화면으로 이동 """
+
+    if request.method == "POST":
+
+        # form 태그의 name 속성을 key값으로, input field값을 value로 하는 ImmutableMultiDict 반환
+        document_type = request.form['document-type']
+
+        if document_type == 'S':
+            return redirect(url_for('home_blueprint.transaction_sales'))
+        else:
+            return redirect(url_for('home_blueprint.transaction_sales'))
+
+    return render_template('/transaction/transaction_init.html', segment = 'transactions', documents=documents_data)
+
+
+@blueprint.route('/transactions/sales', methods=["GET", "POST"])
+@login_required
+def transaction_sales():
+
+    """ 매출전표 입력양식의 리스트 항목 구성 """
+
+    partner_items = Partner.query.filter(Partner.partner_type == "S")
     project_items = Project.query.all()
-    product_items = Product.query.all()
+    product_items = Product.query.filter(Product.product_type == "S")
 
     partner_list = [(partner.partner_code, partner.partner_name) for partner in partner_items]
     project_list = [(project.project_code, project.project_name) for project in project_items]
@@ -24,82 +58,95 @@ def transactions():
 
     if request.method == "POST":
 
-        # form 태그의 name 속성을 key값으로, input field값을 value로 하는 ImmutableMultiDict 반환
+        """ form 태그의 name 속성을 key값으로, input field값을 value로 하는 ImmutableMultiDict 반환 """
+
         sales_transactions_data = request.form
-        print(sales_transactions_data)
-        #
-        # # Journal Entry 테이블 필드를 위한 데이터 추출
-        # date = sales_transactions_data["sales-date"]
-        # partner = sales_transactions_data["sales-partner"]
-        # project = sales_transactions_data["sales-project"]
-        # document_type = sales_transactions_data["sale-inlineRadioOptions"]
-        # description = sales_transactions_data["sales-description"]
-        #
-        #
-        # # 전표번호 자동생성
-        # doc_count = JournalEntry.query.filter(
-        #     JournalEntry.document_type == form.type.data and Transaction.document_date == form.date.data).count()
-        # doc_num = form.type.data + "-" + str(form.date.data) + "-" + str(doc_count + 1)
-        # docunemt_number =
-        #
-        #
-        #
-        #
-        #
-        # # 동일한 전표에 포함된 복수의 품목과 수량을 리스트로 변환
-        # sales_product_list = sales_transactions_data.getlist("sales-product")
-        # sales_quantity_list = sales_transactions_data.getlist("sales-quantity")
-        # sales_amount_list = sales_transactions_data.getlist("sales-amount")
-        # sales_vat_amount_list = sales_transactions_data.getlist("sales-vat-amount")
-        #
-        #
-        #
-        #
-        #
-        # # 입력한 품목의 갯수를 이용하여 transaction 갯수를 파악
-        # number_of_transactions = len(sales_product_list)
-        #
-        # for i in range(number_of_transactions):
-        #
-        #     product = sales_product_list[i]
-        #     quantity = sales_quantity_list[i]
-        #     amount = sales_amount_list[i]
-        #     vat = sales_vat_amount_list[i]
-        #
-        #
-        #
-        #
-        #
-        # # transaction 테이블에 저장 위해 계정과목 자동생성
-        # for i in range(len(number_of_transactions)):
-        #     if sales_transaction_result[i][3] == "외상거래":
-        #         account = ""  # 외상매출금
-        #     elif sales_transaction_result[i][3] == "외상거래":
-        #
-        #
-        #
-        #
-        # # transaction 각각의 전표데이터를 리스트로 변환
-        # sales_transaction_result = [(sales_transactions_data["sales-date"], sales_transactions_data["sales-partner"],sales_transactions_data["sales-project"], sales_transactions_data["sale-inlineRadioOptions"],sales_transactions_data["sales-description"], sales_product_list[i], sales_quantity_list[i], sales_amount_list[i], sales_vat_amount_list[i]) for i in range(number_of_transactions)]
-        #
-        # # for i in range(number_of_transactions):
-        # #     sales_date = sales_transactions_data["sales-date"]
-        # #     sales_partner = sales_transactions_data["sales-partner"]
-        # #     sales_project = sales_transactions_data["sales-project"]
-        # #     sales_description = sales_transactions_data["sales-description"]
-        # #     sales_product = sales_product_list[i]
-        # #     sales_quantity = sales_quantity_list[i]
-        #
-        #
-        #
-        #
 
+        """ Journal Entry 테이블 입력 """
 
+        # ImmutableMultiDict으로부터 Journal Entry 데이터 추출
+        document_date = sales_transactions_data.get("sales-date")
+        partner = sales_transactions_data.get("sales-partner")
+        project = sales_transactions_data.get("sales-project")
+        payment_type = sales_transactions_data.get("sale-inlineRadioOptions")
+        document_description = sales_transactions_data.get("sales-description")
 
+        # 전표번호 자동생성
+        doc_count = JournalEntry.query.filter(
+            JournalEntry.document_type == "S", JournalEntry.document_date == document_date).count()
+        document_number = "S-" + document_date.replace("-", "") + "-" + str(doc_count + 1)
 
-    return render_template('transactions.html', segment = 'transactions', partner_items=partner_list, project_items=project_list, product_items=product_list)
+        # Journal Entry 테이블 데이터 저장
+        new_document = JournalEntry(
+            document_number = document_number,
+            document_type = "S",
+            document_date = document_date,
+            partner_code = partner,
+            project_code = project,
+            payment_type = payment_type,
+            document_description = document_description,
+            user_name = current_user.username
+        )
+        db.session.add(new_document)
+        db.session.commit()
 
+        """ Transaction 테이블 입력 """
 
+        # ImmutableMultiDict으로부터 Transaction 테이블 필드를 위해 동일한 전표에 포함된 복수의 품목, 수량, 금액을 리스트로 변환
+        sales_product_list = sales_transactions_data.getlist("sales-product")
+        sales_quantity_list = sales_transactions_data.getlist("sales-quantity")
+        sales_amount_list = sales_transactions_data.getlist("sales-amount")
+        sales_vat_amount_list = sales_transactions_data.getlist("sales-vat-amount")
+
+        # 결재유형별 계정과목 자동생성
+        if payment_type == "AR":                    # 외상거래
+            account = ACCOUNT_RECEIVABLE
+        elif payment_type == "BT":                  # 계좌이체
+            account = DEPOSITS_ON_DEMAND
+        elif payment_type == "CC":                  # 신용카드
+            account = NOTES_RECEIVABLE
+        elif payment_type == "CA":                  # 현금
+            account = CASH
+        elif payment_type == "GC":                  # 상품권
+            account = PREPAID_EXPENSE
+        else:                                       # E-머니
+            account = DEPOSITS_ON_DEMAND
+
+        # Transaction 테이블 데이터 저장
+
+        # 1. 매출계정 금액 계상
+        new_transaction_sales = Transaction(
+            document_number = document_number,
+            account_code = SALES_ACCOUNT,
+            transaction_amount = -sum([int(amount) for amount in sales_amount_list])
+        )
+        db.session.add(new_transaction_sales)
+        db.session.commit()
+
+        # 2. 지불유형별, 품목별 자산계정 금액 계상
+        for i in range(len(sales_product_list)):
+            new_transaction_assets = Transaction(
+                document_number = document_number,
+                product_code = sales_product_list[i],
+                account_code = account,
+                transaction_quantity= sales_quantity_list[i],
+                transaction_amount= int(sales_amount_list[i]) + int(sales_vat_amount_list[i])
+            )
+            db.session.add(new_transaction_assets)
+            db.session.commit()
+
+        # 3. 부가세 예수금 계정 금액 계상
+        new_transaction_vat = Transaction(
+            document_number = document_number,
+            account_code = VAT_WITHHELD,
+            transaction_amount = -sum([int(amount) for amount in sales_vat_amount_list])
+        )
+        db.session.add(new_transaction_vat)
+        db.session.commit()
+
+        return redirect(url_for('home_blueprint.transaction_init'))
+
+    return render_template('/transaction/transaction_sales.html', segment='transactions', partner_items=partner_list, project_items=project_list, product_items=product_list)
 
 
 
