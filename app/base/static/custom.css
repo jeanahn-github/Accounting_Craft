@@ -9,25 +9,24 @@ tfoot {
     font-weight: 700;
 }
 
-section {
-    margin-top: 20px;
-}
-
 .navbar-dark .navbar-brand {
   color: #f8bd7a;
 }
 
-.modal-header {
-  border-bottom: 3px solid #2f3b59;
-}
-
 .badge {
     border: 0px;
-
 }
 
 
 /* Custom css */
+
+section {
+    margin-top: 20px;
+}
+
+th, td {
+    text-align: center;
+}
 
 ._navbar-welcome {
     color: #fff;
@@ -39,4 +38,8 @@ section {
 
 ._quantity {
     width: 5em;
+}
+
+._amount {
+    text-align: right;
 }
