@@ -1,0 +1,119 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %} Transactions {% endblock %}
+
+
+{% block content %}
+
+<section>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center">
+            <h2>{% if document_type == "D" %}입금전표{% else %}출금전표{% endif %}</h2>
+        </div>
+
+        <hr>
+
+        <form action="{{ url_for('home_blueprint.transaction_deposit_withdraw') }}" id="deposit-withdraw-form"
+              method="post">
+            <div class="row d-flex justify-content-left">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">거래일자</div>
+                        <input class="form-control" id="deposit-withdraw-date" name="deposit-withdraw-date" required
+                               type="date">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">거래처</div>
+                        <select class="form-control" id="deposit-withdraw-partner" name="deposit-withdraw-partner">
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in partner_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }} | {{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">프로젝트</div>
+                        <select class="form-control" id="deposit-withdraw-project" name="deposit-withdraw-project">
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in project_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }} | {{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="input-group d-flex justify-content-left">
+                <div class="input-group-text">적요</div>
+                <input class="form-control" id="deposit-withdraw-description" name="deposit-withdraw-description"
+                       placeholder="적요를 입력하세요" type="text">
+            </div>
+
+            <hr>
+
+            <div class="input-group d-flex justify-content-left">
+                <div class="input-group-text">은행계좌</div>
+                <select class="form-control" id="deposit-withdraw-bank-account" name="deposit-withdraw-bank-account"
+                        required>
+                    <option value="none" selected>선택하세요</option>
+                    {% for item in bank_accounts %}
+                    <option value="{{ item[0] }}">{{ item[0] }} | {{ item[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <hr>
+
+            <div class="input-group-text" id="deposit-withdraw-input">{% if document_type == "D" %}입금내역{% else %}출금내역{%
+                endif %}
+            </div>
+
+            <div class="form-group position-relative float-end">
+                <button class="badge bg-success" id="deposit-withdraw-button-add-row" type="button">항목추가</button>
+                <button class="badge bg-danger" id="deposit-withdraw-button-delete-row" type="button">항목삭제</button>
+            </div>
+
+            <table class="table table-hover" id="deposit-withdraw-table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">계정명</th>
+                    <th scope="col">금액</th>
+                </tr>
+                </thead>
+                <tbody id="deposit-withdraw-tbody">
+                <tr id="deposit-withdraw-table-row">
+                    <th id="deposit-withdraw-coa-th" scope="row">
+                        <select class="form-control" id="deposit-withdraw-coa-select"
+                                name="deposit-withdraw-coa-select" required>
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in coa_accounts %}
+                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                    <td class="d-flex justify-content-center" id="deposit-withdraw-amount-td">
+                        <input class="form-control _amount" id="deposit-withdraw-amount-input"
+                               name="deposit-withdraw-amount-input" required type="number">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot id="deposit-withdraw-tfoot">
+                <tr>
+                    <th scope="row">합계</th>
+                    <td class="_amount" id="deposit-withdraw-sum">0</td> <!-- custom.js에서 자동 입력 -->
+                </tr>
+                </tfoot>
+            </table>
+            <input id="deposit-withdraw-reset-button" class='btn btn-secondary' type='button' value="취소">
+            <input class="btn btn-primary" type="submit" value="저장">
+        </form>
+    </div>
+</section>
+
+{% endblock content %}
