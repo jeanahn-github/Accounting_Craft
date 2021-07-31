@@ -26,6 +26,7 @@ section {
 
 th, td {
     text-align: center;
+    vertical-align: middle;
 }
 
 ._navbar-welcome {
@@ -42,4 +43,34 @@ th, td {
 
 ._amount {
     text-align: right;
+}
+
+._hidden-col {
+    display: none;
+}
+
+._text-strong {
+    font-weight: bold;
+    color: red;
+}
+
+._bordered-table {
+    border-color: black;
+
+}
+
+._bordered-table thead {
+    background: lightgray;
+}
+
+._period {
+    margin-bottom: 0px;
+}
+
+._report-header {
+    text-align: left;
+}
+
+#report-bs-table {
+
 }

@@ -51,8 +51,8 @@ class ChartOfAccount(db.Model):
     __tablename__ = "chart_of_account"
 
     account_code = db.Column(db.Integer, primary_key = True)
-    account_category = db.Column(db.String(1), nullable = False)
-    account_type = db.Column(db.String(1), nullable = False)
+    account_category = db.Column(db.String(2), nullable = False)
+    account_type = db.Column(db.String(2), nullable = False)
     account_group = db.Column(db.Integer, nullable = False)
     account_name = db.Column(db.String(100), unique = True, nullable = False)
     account_description = db.Column(db.Text, nullable = True)
@@ -63,9 +63,10 @@ class Product(db.Model):
 
     product_code = db.Column(db.String(10), primary_key = True)
     product_name = db.Column(db.String(100), nullable = False)
-    product_type = db.Column(db.String(1), nullable = False)
-    product_vat = db.Column(db.String(1), nullable = False)
+    product_type = db.Column(db.String(2), nullable = False)
+    product_vat = db.Column(db.String(2), nullable = False)
     product_cost = db.Column(db.Integer, nullable = False)
+    product_price = db.Column(db.Integer, nullable = True)
     product_description = db.Column(db.Text, nullable = True)
 
 
@@ -74,7 +75,7 @@ class Partner(db.Model):
 
     partner_code = db.Column(db.String(10), primary_key = True)
     partner_name = db.Column(db.String(100), nullable = False)
-    partner_type = db.Column(db.String(1), nullable = False)
+    partner_type = db.Column(db.String(2), nullable = False)
     partner_description = db.Column(db.Text, nullable = True)
 
 
@@ -129,7 +130,7 @@ class JournalEntry(db.Model):
     __tablename__ = "journal_entry"
 
     document_number = db.Column(db.String(20), primary_key = True)
-    document_type = db.Column(db.String(1), nullable = False)
+    document_type = db.Column(db.String(2), nullable = False)
     document_date = db.Column(db.String(10), nullable = False)
 
     partner_code = db.Column(db.String(10), db.ForeignKey('partner.partner_code'), nullable = True)

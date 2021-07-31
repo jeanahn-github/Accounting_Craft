@@ -1,6 +1,6 @@
 {% extends "layouts/base-app.html" %}
 
-{% block title %} Transactions {% endblock %}
+{% block title %}전표생성{% endblock %}
 
 
 {% block content %}
@@ -9,32 +9,32 @@
 <section>
     <div class="d-flex justify-content-center">
         <form method="post">
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <div class="input-group-text" id="transaction-radio">전표유형</div>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <input checked class="form-check-input"
-                       id="transaction-inlineRadio1" name="document-type" type="radio" value="S">
+                       id="transaction-inlineRadio1" name="document-type" type="radio" value="SA">
                 <label class="form-check-label" for="transaction-inlineRadio1">매출전표</label>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <input class="form-check-input" id="transaction-inlineRadio2" name="document-type"
-                       type="radio" value="P">
+                       type="radio" value="PU">
                 <label class="form-check-label" for="transaction-inlineRadio2">매입전표</label>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <input class="form-check-input" id="transaction-inlineRadio3" name="document-type"
-                       type="radio" value="D">
+                       type="radio" value="DE">
                 <label class="form-check-label" for="transaction-inlineRadio3">입금전표</label>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <input class="form-check-input" id="transaction-inlineRadio4" name="document-type"
-                       type="radio" value="W">
+                       type="radio" value="WI">
                 <label class="form-check-label" for="transaction-inlineRadio4">출금전표</label>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check-inline">
                 <input class="form-check-input" id="transaction-inlineRadio5" name="document-type"
-                       type="radio" value="R">
+                       type="radio" value="RE">
                 <label class="form-check-label" for="transaction-inlineRadio5">대체전표</label>
             </div>
             <input class="btn btn-primary" id="document-type-submit" type="submit" value="생성">
@@ -80,7 +80,6 @@
                 <td>조회/수정/삭제</td>
             </tr>
             {% endfor %}
-
             {% endfor %}
             </tbody>
         </table>

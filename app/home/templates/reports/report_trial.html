@@ -1,0 +1,113 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %}계정원장{% endblock %}
+
+{% block content %}
+
+<!-- 기간 선택 Section -->
+
+<section>
+    <div class="container-fluid">
+        <form action="{{ url_for('home_blueprint.report_trial') }}" id="report-trial-form"
+              method="post">
+            <div class="row d-flex justify-content-left">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            기간
+                        </div>
+                        <input class="form-control" id="report-trial-month" name="report-trial-month" required
+                               type="month">
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">프로젝트</div>
+                        <select class="form-control" id="report-trial-project" name="report-trial-project">
+                            <option selected value="all">전체</option>
+                            {% for item in projects %}
+                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <input class="btn btn-primary" type="submit" value="조회">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<hr>
+
+<!-- 시산표 display -->
+<section>
+
+    <div class="container-fluid d-flex justify-content-center">
+        <h2>합계잔액시산표</h2>
+    </div>
+    <div class="container-fluid d-flex justify-content-center">
+        <p class="_period">당기:&nbsp
+        <div class="_text-strong">{{ year }}년 1월 1일</div>
+        &nbsp부터&nbsp&nbsp&nbsp&nbsp
+        <div class="_text-strong">{{year}}년 {{to_month}}월 {{to_day}}일</div>
+        &nbsp까지</p>
+    </div>
+    <div class="container-fluid d-flex justify-content-left">
+        <p>범위:&nbsp
+        <div class="_text-strong">{{ inquiry_project }}</div>
+        </p>
+    </div>
+    <div class="container-fluid">
+        <table class="table table-bordered _bordered-table" id="report-trial-table">
+            <thead>
+            <tr>
+                <th colspan="2">차&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp변</th>
+                <th rowspan="2">계&nbsp&nbsp&nbsp정&nbsp&nbsp&nbsp과&nbsp&nbsp&nbsp목</th>
+                <th colspan="2">대&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp변</th>
+            </tr>
+            <tr>
+                <th scope="col">잔&nbsp&nbsp액</th>
+                <th scope="col">합&nbsp&nbsp계</th>
+                <th scope="col">합&nbsp&nbsp계</th>
+                <th scope="col">잔&nbsp&nbsp액</th>
+            </tr>
+            </thead>
+
+            <tbody id="report-trial-tbody">
+            {% for item in inquiry_result %}
+            <tr>
+                {% if item[1][2] > 0 %}
+                <td class="_amount">{{ item[1][2] }}</td>
+                <td class="_amount">{{ item[1][0] }}</td>
+                <td>{{ item[0] }}</td>
+                <td class="_amount">{{ -item[1][1] }}</td>
+                <td class="_amount">0</td>
+                {% else %}
+                <td class="_amount">0</td>
+                <td class="_amount">{{ item[1][0] }}</td>
+                <td>{{ item[0] }}</td>
+                <td class="_amount">{{ -item[1][1] }}</td>
+                <td class="_amount">{{ -item[1][2] }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+
+            <tfoot id="report-trial-tfoot">
+            <tr>
+                <td class="_amount" id="report-trial-debit-balance">-</td>
+                <td class="_amount" id="report-trial-debit-sum">-</td>
+                <td>합&nbsp&nbsp&nbsp&nbsp&nbsp계</td>
+                <td class="_amount" id="report-trial-credit-sum">-</td>
+                <td class="_amount" id="report-trial-credit-balance">-</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+
+{% endblock content %}

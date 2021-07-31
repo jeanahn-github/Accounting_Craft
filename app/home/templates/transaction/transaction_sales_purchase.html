@@ -1,6 +1,6 @@
 {% extends "layouts/base-app.html" %}
 
-{% block title %} Transactions {% endblock %}
+{% block title %}{% if document_type == "S" %}매출전표{% else %}매입전표{% endif %}{% endblock %}
 
 
 {% block content %}
@@ -8,12 +8,13 @@
 <!-- Jinja2를 이용하여 javascript에 데이터 전달 위한 브릿지 -->
 <script type="text/javascript">
     let product_data = {{ product_items | tojson }};
+    let document_type = {{ document_type | tojson }};
 </script>
 
 <section>
     <div class="container-fluid">
         <div class="d-flex justify-content-center">
-            <h2>{% if document_type == "S" %}매출전표{% else %}매입전표{% endif %}</h2>
+            <h2>{% if document_type == "SA" %}매출전표{% else %}매입전표{% endif %}</h2>
         </div>
 
         <hr>
@@ -24,8 +25,7 @@
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">거래일자</div>
-                        <input class="form-control" id="sales-purchase-date" name="sales-purchase-date" required
-                               type="date">
+                        <input class="form-control" id="sales-purchase-date" name="sales-purchase-date" required type="date">
                     </div>
                 </div>
                 <div class="col-auto">
@@ -61,7 +61,7 @@
             </div>
 
             <hr>
-
+            <!-- TODO: 결재유형에서 계좌이체 선택시 은행계좌 선택 추가-->
             <div class="form-group">
                 <div class="form-check-inline">
                     <div class="input-group-text" id="sales-purchase-radio">결재유형</div>
@@ -106,7 +106,7 @@
 
             <hr>
 
-            <div class="input-group-text" id="sales-purchase-input">{% if document_type == "S" %}매출내역{% else %}매입내역{% endif %}</div>
+            <div class="input-group-text" id="sales-purchase-input">{% if document_type == "SA" %}매출내역{% else %}매입내역{% endif %}</div>
             <div class="form-group position-relative float-end">
                 <button class="badge bg-success" id="sales-purchase-button-add-row" type="button">품목추가</button>
                 <button class="badge bg-danger" id="sales-purchase-button-delete-row" type="button">품목삭제</button>
@@ -132,7 +132,7 @@
                                 onchange="selectedProductDetail(this)" required>
                             <option value="none" selected>선택하세요</option>
                             {% for item in product_items %}
-                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
                             {% endfor %}
                         </select>
                     </th>

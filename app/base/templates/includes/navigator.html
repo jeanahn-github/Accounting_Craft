@@ -45,12 +45,12 @@
                     </a>
                     <ul aria-labelledby="navbarScrollingDropdown1" class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item {% if 'reports_account' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_account')}}">
+                            <a class="dropdown-item {% if 'report_account' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_account')}}">
                                 계정원장
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item {% if 'reports_partner' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_partner')}}">
+                            <a class="dropdown-item {% if 'report_partner' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_partner')}}">
                                 거래처원장
                             </a>
                         </li>
@@ -58,17 +58,17 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item {% if 'reports_trial' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_trial')}}">
+                            <a class="dropdown-item {% if 'report_trial' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_trial')}}" id="nav-menu-report-trial">
                                 시산표
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item {% if 'reports_bs' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_bs')}}">
+                            <a class="dropdown-item {% if 'report_bs' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_bs')}}">
                                 재무상태표
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item {% if 'reports_pl' in segment %} active {% endif %}" href="{{url_for('home_blueprint.reports_pl')}}">
+                            <a class="dropdown-item {% if 'report_pl' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_pl')}}">
                                 손익계산서
                             </a>
                         </li>

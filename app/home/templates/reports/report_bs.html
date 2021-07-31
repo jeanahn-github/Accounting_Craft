@@ -1,0 +1,391 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %}재무상태표{% endblock %}
+
+{% block content %}
+
+<!-- 기간 선택 Section -->
+
+<section>
+    <div class="container-fluid">
+        <form action="{{ url_for('home_blueprint.report_bs') }}" id="report-bs-form"
+              method="post">
+            <div class="row d-flex justify-content-left">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            기간
+                        </div>
+                        <input class="form-control" id="report-bs-month" name="report-bs-month" required
+                               type="month">
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">프로젝트</div>
+                        <select class="form-control" id="report-bs-project" name="report-bs-project">
+                            <option selected value="all">전체</option>
+                            {% for item in projects %}
+                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <input class="btn btn-primary" type="submit" value="조회">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<hr>
+
+<!-- 재무상태표 display -->
+<section>
+
+    <div class="container-fluid d-flex justify-content-center">
+        <h2>재무상태표</h2>
+    </div>
+    <div class="container-fluid d-flex justify-content-center">
+        <p class="_period">당기:&nbsp
+        <div class="_text-strong">{{current_year}}년 {{to_month}}월 {{to_day}}일</div>
+        &nbsp현재</p>
+    </div>
+    <div class="container-fluid d-flex justify-content-center">
+        <p class="_period">전기:&nbsp
+        <div class="_text-strong">{{prior_year}}년 12월 31일</div>
+        &nbsp현재</p>
+    </div>
+    <div class="container-fluid d-flex justify-content-left">
+        <!-- TODO: Company 테이블로부터 회사명 가져오기 -->
+        <p>(주)스몰굿씽&nbsp(
+        <div class="_text-strong">{{ inquiry_project }}</div>
+        )
+        </p>
+    </div>
+    <div class="container-fluid">
+
+        <table class="table table-bordered _bordered-table" id="report-bs-table">
+
+            <thead>
+            <tr>
+                <th colspan="4">계&nbsp&nbsp&nbsp정&nbsp&nbsp&nbsp과&nbsp&nbsp&nbsp목</th>
+                <th colspan="2" scope="col">당&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp기</th>
+                <th colspan="2" scope="col">전&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp기</th>
+            </tr>
+            </thead>
+
+            <tbody id="report-bs-tbody" class="_financial-statements">
+
+            <tr>
+                <th></th>
+                <th class="_report-header" colspan="3">I. 유동자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[0] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[0] }}</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">1. 당좌자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[1] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[1] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if item[0] < 11200 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">2. 재고자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[2] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[2] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 11200 < item[0] < 11300 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th class="_report-header" colspan="3">II. 비유동자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[3] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[3] }}</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">1. 유형자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[4] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[4] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 12100 < item[0] < 12200 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">2. 무형자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[5] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[5] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 12200 < item[0] < 12300 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">3. 투자자산</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[6] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[6] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 12300 < item[0] < 12400 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th class="_report-header" colspan="4">자산합계</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[7] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[7] }}</th>
+            </tr>
+
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">I. 유동부채</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[8] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[8] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 21000 <= item[0] < 22000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">II. 비유동부채</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[9] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[9] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 22000 <= item[0] < 23000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th class="_report-header" colspan="3">부채합계</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[10] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[10] }}</th>
+            </tr>
+
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">I. 자본금</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[11] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[11] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 31000 <= item[0] < 32000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">II. 자본잉여금</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[12] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[12] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 32000 <= item[0] < 33000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">III. 이익잉여금</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[13] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[13] }}</th>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 33000 <= item[0] < 34000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="_report-header" colspan="2">IV. 자본조정</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[14] }}</th>
+                <th class="_amount"></th>
+                <td class="_amount">{{ sum_account_pre[14] }}</td>
+            </tr>
+            {% for item in inquiry_result %}
+            {% if 34000 <= item[0] < 35000 %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="_report-header">{{ item[1] }}</td>
+                <td class="_amount">{{ -item[2] }}</td>
+                <td class="_amount"></td>
+                <td class="_amount">{{ -item[3] }}</td>
+                <td class="_amount"></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th class="_report-header" colspan="3">자본합계</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[15] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[15] }}</th>
+            </tr>
+            <tr>
+                <th class="_report-header" colspan="4">부채와자본합계</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_cur[16] }}</th>
+                <th class="_amount"></th>
+                <th class="_amount">{{ sum_account_pre[16] }}</th>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock content %}

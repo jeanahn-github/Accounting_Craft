@@ -1,0 +1,141 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %}거래처원장{% endblock %}
+
+{% block content %}
+
+<!-- Jinja2를 이용하여 javascript에 데이터 전달 위한 브릿지 -->
+<script type="text/javascript">
+    let partner_sales_data = {{ partner_sales_items | tojson }};
+    let partner_purchase_data = {{ partner_purchase_items | tojson }};
+</script>
+
+
+<!-- 거래처 및 기간 선택 Section -->
+<!-- TODO: 거래처 다중선택을 위해 체크박스 리스트 형태로 수정-->
+<section>
+
+    <div class="container-fluid">
+        <form action="{{ url_for('home_blueprint.report_partner') }}" id="report-partner-form" name="report-partner-form" method="post">
+
+            <div class="form-group">
+                <div class="form-check-inline">
+                    <div class="input-group-text">거래처 구분</div>
+                </div>
+                <div class="form-check-inline">
+                    <input checked class="form-check-input" id="report-partner-inlineRadio1" name="report-partner-radios" type="radio" value="S">
+                    <label class="form-check-label" for="report-partner-inlineRadio1">매출거래처</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="form-check-input" id="report-partner-inlineRadio2" name="report-partner-radios" type="radio" value="P">
+                    <label class="form-check-label" for="report-partner-inlineRadio2">매입거래처</label>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row d-flex justify-content-left">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            거래처
+                        </div>
+                        <select class="form-control" id="report-partner-partner" name="report-partner-partner">
+                            {% for item in partner_sales_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            계정과목
+                        </div>
+                        <select class="form-control" id="report-partner-coa" name="report-partner-coa">
+                            <option value="all">전체</option>
+                            {% for item in coa_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            기간
+                        </div>
+                        <input class="form-control" id="report-partner-from-date" name="report-partner-from-date"
+                               required type="date">
+                        <h4>&nbsp&nbsp~&nbsp&nbsp</h4>
+                        <input class="form-control" id="report-partner-to-date" name="report-partner-to-date"
+                               required type="date">
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <input class="btn btn-primary" type="submit" value="조회">
+                </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+<hr>
+
+<!-- 거래처원장 display -->
+<!--TODO: Bootstarp tab을 이용하여 거래처별로 display-->
+<section>
+
+    <div class="container-fluid d-flex justify-content-center">
+        <h2>거래처원장</h2>
+    </div>
+    <div class="container-fluid d-flex justify-content-left">
+        <p>거래처:&nbsp
+        <div class="_text-strong">{{ inquiry_partner }}</div>
+        &nbsp | 계정과목:&nbsp
+        <div class="_text-strong">{{ inquiry_coa }}</div>
+        &nbsp | 기간:&nbsp
+        <div class="_text-strong">{{ from_date }} 부터 {{ to_date }} 까지</div>
+        </p>
+    </div>
+    <div class="container-fluid">
+        <table class="table _report-table" id="report-partner-table">
+            <thead class="table-dark">
+            <tr>
+                <th class="_hidden-col" scope="col">년월</th>
+                <th scope="col">일시</th>
+                <th scope="col">적요</th>
+                <th scope="col">계정과목</th>
+                <th scope="col">차변금액</th>
+                <th scope="col">대변금액</th>
+                <th scope="col">잔액</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for item in inquiry_result %}
+            <tr>
+                <th class="_hidden-col" scope="row">{{ item[0]}}</th>
+                <th scope="row">{{ item[1]}}</th>
+                <td>{{ item[2]}}</td>
+                <td>{{ item[3]}}</td>
+                {% if item[4] >= 0 %}
+                <td class="_amount">{{item[4]}}</td>
+                <td class="_amount">0</td>
+                {% else %}
+                <td class="_amount">0</td>
+                <td class="_amount">{{ -item[4] }}</td>
+                {% endif %}
+                <td class="_amount">0</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock content %}

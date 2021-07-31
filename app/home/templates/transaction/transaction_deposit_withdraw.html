@@ -1,6 +1,6 @@
 {% extends "layouts/base-app.html" %}
 
-{% block title %} Transactions {% endblock %}
+{% block title %} {% if document_type == "DE" %}입금전표{% else %}출금전표{% endif %} {% endblock %}
 
 
 {% block content %}
@@ -8,7 +8,7 @@
 <section>
     <div class="container-fluid">
         <div class="d-flex justify-content-center">
-            <h2>{% if document_type == "D" %}입금전표{% else %}출금전표{% endif %}</h2>
+            <h2>{% if document_type == "DE" %}입금전표{% else %}출금전표{% endif %}</h2>
         </div>
 
         <hr>
@@ -70,7 +70,7 @@
 
             <hr>
 
-            <div class="input-group-text" id="deposit-withdraw-input">{% if document_type == "D" %}입금내역{% else %}출금내역{%
+            <div class="input-group-text" id="deposit-withdraw-input">{% if document_type == "DE" %}입금내역{% else %}출금내역{%
                 endif %}
             </div>
 
@@ -93,7 +93,7 @@
                                 name="deposit-withdraw-coa-select" required>
                             <option value="none" selected>선택하세요</option>
                             {% for item in coa_accounts %}
-                            <option value="{{ item[0] }}">{{ item[1] }}</option>
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
                             {% endfor %}
                         </select>
                     </th>

@@ -1,0 +1,145 @@
+{% extends "layouts/base-app.html" %}
+
+{% block title %} 대체전표 {% endblock %}
+
+{% block content %}
+
+<section>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center">
+            <h2>대체전표</h2>
+        </div>
+
+        <hr>
+
+        <form action="{{ url_for('home_blueprint.transaction_replacement') }}" id="replacement-form"
+              method="post" onsubmit="return CheckDebitCreditAmount()">
+            <div class="row d-flex justify-content-left">
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">거래일자</div>
+                        <input class="form-control" id="replacement-date" name="replacement-date" required
+                               type="date">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">거래처</div>
+                        <select class="form-control" id="replacement-partner" name="replacement-partner">
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in partner_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }} | {{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">프로젝트</div>
+                        <select class="form-control" id="replacement-project" name="replacement-project">
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in project_items %}
+                            <option value="{{ item[0] }}">{{ item[0] }} | {{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="input-group d-flex justify-content-left">
+                <div class="input-group-text">적요</div>
+                <input class="form-control" id="replacement-description" name="replacement-description"
+                       placeholder="적요를 입력하세요" type="text">
+            </div>
+
+            <hr>
+
+            <div class="input-group-text" id="replacement-debit-input">차변항목</div>
+
+            <div class="form-group position-relative float-end">
+                <button class="badge bg-success" id="replacement-debit-button-add-row" type="button">항목추가</button>
+                <button class="badge bg-danger" id="replacement-debit-button-delete-row" type="button">항목삭제</button>
+            </div>
+
+            <table class="table table-hover" id="replacement-debit-table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">계정명</th>
+                    <th scope="col">금액</th>
+                </tr>
+                </thead>
+                <tbody id="replacement-debit-tbody">
+                <tr id="replacement-debit-table-row">
+                    <th id="replacement-debit-coa-th" scope="row">
+                        <select class="form-control" id="replacement-debit-coa-select"
+                                name="replacement-debit-coa-select" required>
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in coa_accounts %}
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                    <td class="d-flex justify-content-center" id="replacement-debit-amount-td">
+                        <input class="form-control _amount" id="replacement-debit-amount-input"
+                               name="replacement-debit-amount-input" required type="number">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot id="replacement-debit-tfoot">
+                <tr>
+                    <th scope="row">차변금액 합계</th>
+                    <td class="_amount" id="replacement-debit-sum">0</td> <!-- custom.js에서 자동 입력 -->
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="input-group-text" id="replacement-credit-input">대변항목</div>
+
+            <div class="form-group position-relative float-end">
+                <button class="badge bg-success" id="replacement-credit-button-add-row" type="button">항목추가</button>
+                <button class="badge bg-danger" id="replacement-credit-button-delete-row" type="button">항목삭제</button>
+            </div>
+
+            <table class="table table-hover" id="replacement-credit-table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">계정명</th>
+                    <th scope="col">금액</th>
+                </tr>
+                </thead>
+                <tbody id="replacement-credit-tbody">
+                <tr id="replacement-credit-table-row">
+                    <th id="replacement-credit-coa-th" scope="row">
+                        <select class="form-control" id="replacement-credit-coa-select"
+                                name="replacement-credit-coa-select" required>
+                            <option value="none" selected>선택하세요</option>
+                            {% for item in coa_accounts %}
+                            <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                    <td class="d-flex justify-content-center" id="replacement-credit-amount-td">
+                        <input class="form-control _amount" id="replacement-credit-amount-input"
+                               name="replacement-credit-amount-input" required type="number">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot id="replacement-credit-tfoot">
+                <tr>
+                    <th scope="row">대변금액 합계</th>
+                    <td class="_amount" id="replacement-credit-sum">0</td> <!-- custom.js에서 자동 입력 -->
+                </tr>
+                </tfoot>
+            </table>
+
+            <input id="replacement-reset-button" class='btn btn-secondary' type='button' value="취소">
+            <input class="btn btn-primary" type="submit" value="저장">
+
+        </form>
+    </div>
+
+</section>
+
+{% endblock content %}
