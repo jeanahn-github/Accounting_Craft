@@ -42,8 +42,8 @@ $(document).ready(function() {
 
                 return $('<tr/>')
                     .append( '<td colspan="3">전표 합계</td>' )
-                    .append( '<td class="_amount">'+debitSum.toFixed(0)+'</td>' )
-                    .append( '<td class="_amount">'+creditSum.toFixed(0)+'</td>' )
+                    .append( '<td class="_amount">'+debitSum.toLocaleString()+'</td>' )
+                    .append( '<td class="_amount">'+creditSum.toLocaleString()+'</td>' )
                     .append( '<td/>' )
                     .append( '<td/>' )
                     .append( '<td>' );
@@ -537,11 +537,11 @@ function CheckDebitCreditAmount() {
 }
 
 
-/************************** Report **************************/
+/************************** Ledgers **************************/
 
 /* 계정원장 및 거래처원장 pagination 및 포맷팅*/
 $(document).ready(function() {
-    $('._report-table').DataTable( {
+    $('._ledger-table').DataTable( {
         columnDefs: [
                 {
                   "render": $.fn.dataTable.render.number( ',', '.', 0, '','' ),
@@ -568,8 +568,8 @@ $(document).ready(function() {
 
                 return $('<tr/>')
                     .append( '<td colspan="3">월계</td>' )
-                    .append( '<td class="_amount">'+monthDebitSum.toFixed(0)+'</td>' )
-                    .append( '<td class="_amount">'+monthCreditSum.toFixed(0)+'</td>' )
+                    .append( '<td class="_amount">'+monthDebitSum.toLocaleString()+'</td>' )
+                    .append( '<td class="_amount">'+monthCreditSum.toLocaleString()+'</td>' )
                     .append( '<td/>' );
             }
         }
@@ -579,22 +579,24 @@ $(document).ready(function() {
 
 /* 거래처원장 거래처유형 선택시 해당 거래처 리스트 표시*/
 $(function() {
-    $('input:radio[name="report-partner-radios"]').change(function() {
-        $('#report-partner-partner option').remove();
+    $('input:radio[name="ledger-partner-radios"]').change(function() {
+        $('#ledger-partner-partner option').remove();
         if ($(this).val() == 'S') {
             $.each(partner_sales_data, function(key,value) {
-                $('#report-partner-partner').append($('<option>',
+                $('#ledger-partner-partner').append($('<option>',
                 {value: value[0], text: value[0]+"|"+value[1]}));
             });
         } else {
             $.each(partner_purchase_data, function(key,value) {
-                $('#report-partner-partner').append($('<option>',
+                $('#ledger-partner-partner').append($('<option>',
                 {value: value[0], text: value[0]+"|"+value[1]}));
             });
         }
     });
 });
 
+
+/************************** Reports **************************/
 
 /* 시산표 합계금액 계산 및 표시*/
 $(document).ready(function() {
@@ -636,7 +638,6 @@ $(document).ready(function() {
             console.error(error);
         }
     }
-
 })
 
 /* 재무제표의 금액셀(_amount 클래스)의 천단위 콤마 표시 */

@@ -25,6 +25,7 @@ Transactions
 @blueprint.route('/transactions', methods = ["GET", "POST"])
 @login_required
 def transaction_init():
+
     """ 전표 리스트 데이터 Display """
 
     # 1. JournalEntry, Transaction, ChartOfAccount 테이블을 join하여 계정과목별로 합산된 데이터 읽어오기
@@ -64,6 +65,7 @@ def transaction_init():
 @blueprint.route('/transactions/sales_purchase', methods = ["GET", "POST"])
 @login_required
 def transaction_sales_purchase():
+
     """ 매출-매입전표 입력양식의 거래처와 프로젝트의 리스트 항목 구성 """
 
     document_type = session.get('document_type', None)
@@ -269,6 +271,7 @@ def transaction_sales_purchase():
 @blueprint.route('/transactions/deposit_withdraw', methods = ["GET", "POST"])
 @login_required
 def transaction_deposit_withdraw():
+
     """ 입금-출금전표 입력양식의 거래처, 프로젝트, 은행계좌의 리스트 항목 구성 """
 
     document_type = session.get('document_type', None)
@@ -370,6 +373,7 @@ def transaction_deposit_withdraw():
 @blueprint.route('/transactions/replacement', methods = ["GET", "POST"])
 @login_required
 def transaction_replacement():
+
     """ 대체전표 입력양식의 거래처, 프로젝트의 리스트 항목 구성 """
 
     document_type = session.get('document_type', None)
@@ -456,15 +460,27 @@ def closing():
 
 
 """
-Reports
+Ledgers
 """
 
-
-# TODO: 은행계좌 거래내역 보고서 추가
-
-@blueprint.route('/reports/account', methods = ["GET", "POST"])
+@blueprint.route('/ledgers/bank', methods = ["GET", "POST"])
 @login_required
-def report_account():
+def ledger_bank():
+
+    return render_template('ledgers/ledger_bank.html', segment = 'ledger_bank')
+
+
+@blueprint.route('/ledgers/inventory', methods = ["GET", "POST"])
+@login_required
+def ledger_inventory():
+
+    return render_template('ledgers/ledger_inventory.html', segment = 'ledger_inventory')
+
+
+@blueprint.route('/ledgers/account', methods = ["GET", "POST"])
+@login_required
+def ledger_account():
+
     """ 계정원장의 계정과목 리스트 항목 구성 """
     coa_accounts = ChartOfAccount.query.all()
     coa_account_list = [(coa_account.account_code, coa_account.account_name) for coa_account in coa_accounts]
@@ -481,9 +497,9 @@ def report_account():
         # form 태그의 name 속성을 key값으로, input field값을 value로 하는 ImmutableMultiDict 반환
         inquiry_conditions = request.form
 
-        inquiry_account = inquiry_conditions.get("report-account-account")
-        from_date = inquiry_conditions.get("report-account-from-date")
-        to_date = inquiry_conditions.get("report-account-to-date")
+        inquiry_account = inquiry_conditions.get("ledger-account-account")
+        from_date = inquiry_conditions.get("ledger-account-from-date")
+        to_date = inquiry_conditions.get("ledger-account-to-date")
 
         # 조회 계정과목 표시를 위한 데이터 추출
         inquiry_account_name = ChartOfAccount.query.filter(
@@ -517,14 +533,15 @@ def report_account():
 
     # TODO: 거래처원장 이월금액과 잔액 및 누계금액 추가
 
-    return render_template('reports/report_account.html', segment = 'report_account', coa_accounts = coa_account_list,
+    return render_template('ledgers/ledger_account.html', segment = 'ledger_account', coa_accounts = coa_account_list,
                            inquiry_result = final_results, inquiry_account = inquiry_account_name,
                            from_date = from_date, to_date = to_date)
 
 
-@blueprint.route('/reports/partner', methods = ["GET", "POST"])
+@blueprint.route('/ledgers/partner', methods = ["GET", "POST"])
 @login_required
-def report_partner():
+def ledger_partner():
+
     """ 거래처원장의 거래처 리스트 항목 구성 """
     partner_sales = Partner.query.filter(Partner.partner_type == "S").all()
     partner_purchase = Partner.query.filter(Partner.partner_type == "P").all()
@@ -549,10 +566,10 @@ def report_partner():
         # form 태그의 name 속성을 key값으로, input field값을 value로 하는 ImmutableMultiDict 반환
         inquiry_conditions = request.form
 
-        inquiry_partner = inquiry_conditions.get("report-partner-partner")
-        inquiry_coa = inquiry_conditions.get("report-partner-coa")
-        from_date = inquiry_conditions.get("report-partner-from-date")
-        to_date = inquiry_conditions.get("report-partner-to-date")
+        inquiry_partner = inquiry_conditions.get("ledger-partner-partner")
+        inquiry_coa = inquiry_conditions.get("ledger-partner-coa")
+        from_date = inquiry_conditions.get("ledger-partner-from-date")
+        to_date = inquiry_conditions.get("ledger-partner-to-date")
 
         # 조회 거래처 표시를 위한 데이터 추출
         inquiry_partner_name = Partner.query.filter(Partner.partner_code == inquiry_partner).first().partner_name
@@ -581,16 +598,22 @@ def report_partner():
 
     # TODO: 계정원장 이월금액과 잔액 및 누계금액 추가
 
-    return render_template('reports/report_partner.html', segment = 'report_account',
+    return render_template('ledgers/ledger_partner.html', segment = 'ledger_partner',
                            partner_sales_items = partner_sales_list, partner_purchase_items = partner_purchase_list,
                            coa_items = coa_remove_duplicate_list, inquiry_result = final_results,
                            inquiry_partner = inquiry_partner_name, inquiry_coa = inquiry_coa_name,
                            from_date = from_date, to_date = to_date)
 
 
+"""
+Reports
+"""
+
+
 @blueprint.route('/reports/trial', methods = ["GET", "POST"])
 @login_required
 def report_trial():
+
     """ 시산표의 프로젝트 리스트 항목 구성 """
     projects = Project.query.all()
     project_list = [(project.project_code, project.project_name) for project in projects]
@@ -1132,6 +1155,11 @@ def report_pl():
                            current_year = current_year, prior_year = prior_year, current_from_month=current_from_month, current_to_month = current_to_month,
                            current_to_day = current_to_day, sum_account_cur = sums_of_account_cur, sum_account_pre = sums_of_account_pre)
 
+
+@blueprint.route('/reports/cost', methods=["GET", "POST"])
+@login_required
+def report_cost():
+    return render_template('reports/report_cost.html', segment = 'report_cost')
 
 """
 Settings

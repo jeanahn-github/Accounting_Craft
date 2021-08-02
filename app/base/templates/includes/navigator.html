@@ -22,8 +22,8 @@
                     <a aria-current="page"
                        class="nav-link {% if 'transactions' in segment %} active {% endif %}"
                        href="{{url_for('home_blueprint.transaction_init')}}">
-                        <i class="bi-pencil-square _nav-icon"></i>
-                        Transactions
+                        <i class="bi bi-pencil-square _nav-icon"></i>
+                        Journal Entry
                     </a>
                 </li>
 
@@ -38,29 +38,51 @@
 
                 <li class="nav-item dropdown">
                     <a aria-expanded="false"
-                       class="nav-link dropdown-toggle {% if 'reports' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-reports"
-                       id="navbarScrollingDropdown1" role="button">
-                        <i class='bi bi-table nav_icon'></i>
-                        Reports
+                       class="nav-link dropdown-toggle {% if 'ledgers' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-ledgers"
+                       id="navbarScrollingDropdown0" role="button">
+                        <i class="bi bi-journals _nav-icon"></i>
+                        Ledgers
                     </a>
-                    <ul aria-labelledby="navbarScrollingDropdown1" class="dropdown-menu">
+                    <ul aria-labelledby="navbarScrollingDropdown0" class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item {% if 'report_account' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_account')}}">
+                            <a class="dropdown-item {% if 'ledger_bank' in segment %} active {% endif %}" href="{{url_for('home_blueprint.ledger_bank')}}">
+                                은행예금장부
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'ledger_inventory' in segment %} active {% endif %}" href="{{url_for('home_blueprint.ledger_inventory')}}">
+                                재고원장
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if 'ledger_account' in segment %} active {% endif %}" href="{{url_for('home_blueprint.ledger_account')}}">
                                 계정원장
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item {% if 'report_partner' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_partner')}}">
+                            <a class="dropdown-item {% if 'ledger_partner' in segment %} active {% endif %}" href="{{url_for('home_blueprint.ledger_partner')}}">
                                 거래처원장
                             </a>
                         </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false"
+                       class="nav-link dropdown-toggle {% if 'reports' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-reports"
+                       id="navbarScrollingDropdown1" role="button">
+                        <i class='bi bi-table _nav-icon'></i>
+                        Reports
+                    </a>
+                    <ul aria-labelledby="navbarScrollingDropdown1" class="dropdown-menu">
                         <li>
                             <a class="dropdown-item {% if 'report_trial' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_trial')}}" id="nav-menu-report-trial">
                                 시산표
                             </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
                         <li>
                             <a class="dropdown-item {% if 'report_bs' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_bs')}}">
@@ -72,6 +94,11 @@
                                 손익계산서
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item {% if 'report_cost' in segment %} active {% endif %}" href="{{url_for('home_blueprint.report_cost')}}">
+                                원가명세서
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -79,7 +106,7 @@
                     <a aria-expanded="false"
                        class="nav-link dropdown-toggle {% if 'settings' in segment %} active {% endif %}" data-bs-toggle="dropdown" href="#submenu-settings"
                        id="navbarScrollingDropdown2" role="button">
-                        <i class='bi bi-gear-fill nav_icon'></i>
+                        <i class='bi bi-gear-fill _nav-icon'></i>
                         Settings
                     </a>
                     <ul aria-labelledby="navbarScrollingDropdown2" class="dropdown-menu">

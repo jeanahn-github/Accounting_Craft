@@ -12,21 +12,31 @@
     Accounting Craft - {% block title %}{% endblock %} | SmallGoodThing
 </title>
 
-<!-- Fontawesome -->
-<script src="https://kit.fontawesome.com/802f1ec961.js" crossorigin="anonymous"></script>
+<!-- Bootstrap5 CSS -->
+    <link href="{{ url_for('base_blueprint.static', filename='vendor/bootstrap-5.0.2-dist/css/bootstrap.css') }}"
+          rel="stylesheet">
 
-<!--Bootstrap 5.02-->
-<link type="text/css" href="/static/vendor/Bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--FontAwesome-->
+    <link href="{{ url_for('base_blueprint.static', filename='vendor/fontawesome-free-5.15.3-web/css/all.css') }}"
+          rel="stylesheet">
 
 <!--Custom CSS-->
-<link type="text/css" href="/static/custom.css" rel="stylesheet">
+    <link href="{{ url_for('base_blueprint.static', filename='custom.css') }}" rel="stylesheet" type="text/css">
+
 
 </head>
 <body>
+<main>
 
     {% block content %}{% endblock content %}
 
+</main>
 
+<!-- Bootstrap5 js -->
+<script src="/static/vendor/bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
 
+<!-- jQuery 3.6.0 -->
+<script crossorigin="anonymous" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </body>
 </html>

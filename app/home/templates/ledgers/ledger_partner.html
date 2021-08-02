@@ -16,31 +16,31 @@
 <section>
 
     <div class="container-fluid">
-        <form action="{{ url_for('home_blueprint.report_partner') }}" id="report-partner-form" name="report-partner-form" method="post">
+        <form action="{{ url_for('home_blueprint.ledger_partner') }}" id="ledger-partner-form" name="ledger-partner-form" method="post">
 
             <div class="form-group">
                 <div class="form-check-inline">
                     <div class="input-group-text">거래처 구분</div>
                 </div>
                 <div class="form-check-inline">
-                    <input checked class="form-check-input" id="report-partner-inlineRadio1" name="report-partner-radios" type="radio" value="S">
-                    <label class="form-check-label" for="report-partner-inlineRadio1">매출거래처</label>
+                    <input checked class="form-check-input" id="ledger-partner-inlineRadio1" name="ledger-partner-radios" type="radio" value="S">
+                    <label class="form-check-label" for="ledger-partner-inlineRadio1">매출거래처</label>
                 </div>
                 <div class="form-check-inline">
-                    <input class="form-check-input" id="report-partner-inlineRadio2" name="report-partner-radios" type="radio" value="P">
-                    <label class="form-check-label" for="report-partner-inlineRadio2">매입거래처</label>
+                    <input class="form-check-input" id="ledger-partner-inlineRadio2" name="ledger-partner-radios" type="radio" value="P">
+                    <label class="form-check-label" for="ledger-partner-inlineRadio2">매입거래처</label>
                 </div>
             </div>
 
             <hr>
 
-            <div class="row d-flex justify-content-left">
+            <div class="row d-flex justify-content-center">
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">
                             거래처
                         </div>
-                        <select class="form-control" id="report-partner-partner" name="report-partner-partner">
+                        <select class="form-control" id="ledger-partner-partner" name="ledger-partner-partner">
                             {% for item in partner_sales_items %}
                             <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
                             {% endfor %}
@@ -53,7 +53,7 @@
                         <div class="input-group-text">
                             계정과목
                         </div>
-                        <select class="form-control" id="report-partner-coa" name="report-partner-coa">
+                        <select class="form-control" id="ledger-partner-coa" name="ledger-partner-coa">
                             <option value="all">전체</option>
                             {% for item in coa_items %}
                             <option value="{{ item[0] }}">{{ item[0] }}|{{ item[1] }}</option>
@@ -67,10 +67,10 @@
                         <div class="input-group-text">
                             기간
                         </div>
-                        <input class="form-control" id="report-partner-from-date" name="report-partner-from-date"
+                        <input class="form-control" id="ledger-partner-from-date" name="ledger-partner-from-date"
                                required type="date">
                         <h4>&nbsp&nbsp~&nbsp&nbsp</h4>
-                        <input class="form-control" id="report-partner-to-date" name="report-partner-to-date"
+                        <input class="form-control" id="ledger-partner-to-date" name="ledger-partner-to-date"
                                required type="date">
                     </div>
                 </div>
@@ -88,7 +88,7 @@
 
 <!-- 거래처원장 display -->
 <!--TODO: Bootstarp tab을 이용하여 거래처별로 display-->
-<section>
+<section class="_contents">
 
     <div class="container-fluid d-flex justify-content-center">
         <h2>거래처원장</h2>
@@ -103,7 +103,7 @@
         </p>
     </div>
     <div class="container-fluid">
-        <table class="table _report-table" id="report-partner-table">
+        <table class="table _data-table _ledger-table" id="ledger-partner-table">
             <thead class="table-dark">
             <tr>
                 <th class="_hidden-col" scope="col">년월</th>
